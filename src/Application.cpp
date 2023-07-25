@@ -3,6 +3,51 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
+
+struct ShaderSource
+{
+    std::string vertexShader;
+    std::string fragmentShader;
+};
+
+static std::string GetFileContents(const std::string& filepath)
+{
+    std::ifstream file{filepath};
+    if(!file)
+    {
+        throw (std::string{"Can't open file "} + filepath + '\n');
+    }
+
+    std::string res;
+    for(std::string line; std::getline(file, line); res += (line + '\n'));
+
+    file.close();
+
+    return res;
+}
+
+static ShaderSource ParseShader(const std::string& name)
+{
+    std::string vertexShaderFilepath;
+    std::string fragmentShaderFilepath;
+    vertexShaderFilepath.append("res/shaders/").append(name).append(".vs");
+    fragmentShaderFilepath.append("res/shaders/").append(name).append(".fs");
+    std::string vertexSource;
+    std::string fragmentSource;
+    try
+    {
+        vertexSource = GetFileContents(vertexShaderFilepath);
+        fragmentSource = GetFileContents(fragmentShaderFilepath);
+    }
+    catch(std::string s)
+    {
+        std::cout << s;
+        return {"", ""};
+    }
+    return{vertexSource, fragmentSource};
+}
 
 static GLuint CompileShader(GLenum type, const std::string& source)
 {
@@ -104,27 +149,8 @@ int main()
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (const void*)0);
     glEnableVertexAttribArray(0);
 
-    std::string vertexShader =
-        "#version 330 core\n"
-        "\n"
-        "layout(location = 0) in vec4 position;\n"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = position;\n"
-        "}\n";
-
-    std::string fragmentShader =
-        "#version 330 core\n"
-        "\n"
-        "out vec4 color;\n"
-        "\n"
-        "void main()\n"
-        "{\n"
-        "   color = vec4(0.0, 1.0, 0.0, 1.0);\n"
-        "}\n";
-
-    GLuint shader = CreateShader(vertexShader, fragmentShader);
+    auto [vertexSource, fragmentSource] = ParseShader("Basic");
+    GLuint shader = CreateShader(vertexSource, fragmentSource);
     glUseProgram(shader);
 
     /* Loop until the user closes the window */
