@@ -1,3 +1,6 @@
 [submodule "vendor/glfw"]
 	path = vendor/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "vendor/debugbreak"]
+	path = vendor/debugbreak
+	url = https://github.com/harrand/debugbreak.git
