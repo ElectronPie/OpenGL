@@ -7,6 +7,7 @@ add_executable(${PROJECT_NAME} src/Application.cpp)
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:DEBUG>)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/glad)
 
