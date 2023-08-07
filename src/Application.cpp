@@ -162,6 +162,9 @@ int main()
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
+    /* My laptop is a such a potato, this line somehow made the program faster on it KEKW */
+    glfwSwapInterval(1);
+
     /* Load OpenGL with GLAD */
     if(!gladLoadGL())
     {
@@ -201,14 +204,11 @@ int main()
     GLCall(GLuint shader = CreateShader(vertexSource, fragmentSource));
     GLCall(glUseProgram(shader));
 
+    float r = 0.0f;
+    float increment = 0.05f;
+
     GLCall(GLint location = glGetUniformLocation(shader, "u_Color"));
     ASSERT(location != -1);
-    GLCall(glUniform4f(location,
-        0.265625f,
-        0.63671875f,
-        0.40625f,
-        1.0f
-    ));
 
     /* Loop until the user closes the window */
     while(!glfwWindowShouldClose(window))
@@ -216,7 +216,19 @@ int main()
         /* Render here */
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
+        GLCall(glUniform4f(location,
+            r,
+            0.63671875f,
+            0.40625f,
+            1.0f
+        ));
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
+
+        if(r >= 1.0f)
+            increment = -0.05f;
+        else if(r <= 0.0f)
+            increment = +0.05f;
+        r += increment;
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
