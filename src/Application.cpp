@@ -9,7 +9,12 @@
 
 #include "debugbreak.h"
 
-#define ASSERT(x) if(!(x)) debug_break();
+#ifdef DEBUG
+    #define ASSERT(x) if(!(x)) debug_break()
+#else
+    #define ASSERT(x)
+#endif
+
 #ifdef DEBUG
     #define GLCall(x) \
         GLClearError();\
@@ -195,6 +200,15 @@ int main()
     auto [vertexSource, fragmentSource] = ParseShader("Basic");
     GLCall(GLuint shader = CreateShader(vertexSource, fragmentSource));
     GLCall(glUseProgram(shader));
+
+    GLCall(GLint location = glGetUniformLocation(shader, "u_Color"));
+    ASSERT(location != -1);
+    GLCall(glUniform4f(location,
+        0.265625f,
+        0.63671875f,
+        0.40625f,
+        1.0f
+    ));
 
     /* Loop until the user closes the window */
     while(!glfwWindowShouldClose(window))
