@@ -71,19 +71,20 @@ int main()
         };
 
         VertexArray va;
-        VertexBuffer vb{positions, sizeof(positions)};
 
+        VertexBuffer vb{positions, sizeof(positions)};
         VertexBufferLayout layout;
         layout.Push<float>(2);
         va.AddBuffer(vb, layout);
 
         IndexBuffer ib{indices, (sizeof(indices)/sizeof(indices[0]))};
+        va.AddIndexBuffer(ib);
 
         Shader shader{"", "Basic"};
 
         va.Unbind();
-        vb.Unbind();
-        ib.Unbind();
+        // vb.Unbind();
+        // ib.Unbind();
         shader.Unbind();
 
         float r = 0.0f;
