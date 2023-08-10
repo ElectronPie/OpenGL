@@ -4,6 +4,9 @@
 
 #include <debugbreak.h>
 
+#include "VertexArray.h"
+#include "Shader.h"
+
 #ifdef DEBUG
     #define ASSERT(x) if(!(x)) debug_break()
 #else
@@ -22,3 +25,10 @@
 void GLClearError();
 
 bool GLLogCall(const char* function, const char* file, int line);
+
+class Renderer
+{
+public:
+    void Draw(const VertexArray& va, const Shader& shader);
+    void Clear();
+};

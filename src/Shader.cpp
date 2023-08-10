@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "Renderer.h"
+
 static std::string GetFileContents(const std::string& filepath)
 {
     std::ifstream file{filepath};
@@ -54,7 +56,7 @@ Shader::ShaderSource Shader::ParseShader(const std::string& respath, const std::
     return {vertexSource, fragmentSource};
 }
 
-unsigned int Shader::CompileShader(GLenum type, const std::string& source)
+unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 {
     GLCall(GLuint id = glCreateShader(type));
     const char* src = source.c_str();
@@ -124,6 +126,7 @@ void Shader::Unbind() const
 
 void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
 {
+    Bind();
     GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
 }
 

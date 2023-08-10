@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Renderer.h"
-
 #include <string>
 #include <unordered_map>
 
@@ -24,7 +22,7 @@ private:
         std::string fragmentShader;
     };
     ShaderSource ParseShader(const std::string& respath, const std::string& name);
-    unsigned int CompileShader(GLenum type, const std::string& source);
+    unsigned int CompileShader(unsigned int type, const std::string& source);
     unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
     unsigned int GetUniformLocation(const std::string& name);
 
