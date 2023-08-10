@@ -4,15 +4,22 @@ project(OpenGL)
 
 add_executable(${PROJECT_NAME}
     src/Application.cpp
+
     src/Renderer.h
     src/Renderer.cpp
+
     src/VertexBuffer.h
     src/VertexBuffer.cpp
+
     src/IndexBuffer.h
     src/IndexBuffer.cpp
+
     src/VertexArray.h
     src/VertexArray.cpp
     src/VertexBufferLayout.h
+
+    src/Shader.h
+    src/Shader.cpp
 )
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
