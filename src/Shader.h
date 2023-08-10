@@ -3,6 +3,7 @@
 #include "Renderer.h"
 
 #include <string>
+#include <unordered_map>
 
 class Shader
 {
@@ -28,4 +29,5 @@ private:
     unsigned int GetUniformLocation(const std::string& name);
 
     unsigned int m_RendererID;
+    std::unordered_map<std::string, int> m_UniformLocationCache;
 };
