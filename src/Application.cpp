@@ -13,8 +13,8 @@
 #include "VertexBufferLayout.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
-
 #include "Shader.h"
+#include "Texture.h"
 
 int main()
 {
@@ -60,10 +60,10 @@ int main()
 
     {
         float positions[] = {
-            -0.5f, -0.5f,
-            0.5f, -0.5f,
-            0.5f,  0.5f,
-            -0.5f,  0.5f
+            -0.5f, -0.5f, 0.0f, 0.0f, // 0
+            +0.5f, -0.5f, 1.0f, 0.0f, // 1
+            +0.5f, +0.5f, 1.0f, 1.0f, // 2
+            -0.5f, +0.5f, 0.0f, 1.0f  // 3
         };
 
         unsigned int indices[] = {
@@ -71,10 +71,14 @@ int main()
             2, 3, 0
         };
 
+        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+        GLCall(glEnable(GL_BLEND));
+
         VertexArray va;
 
         VertexBuffer vb{positions, sizeof(positions)};
         VertexBufferLayout layout;
+        layout.Push<float>(2);
         layout.Push<float>(2);
         va.AddBuffer(vb, layout);
 
@@ -82,13 +86,18 @@ int main()
         va.AddIndexBuffer(ib);
 
         Shader shader{"", "Basic"};
+        shader.SetUniform4f("u_Color", 0.0f, 0.0f, 1.0f, 1.0f);
 
-        Renderer renderer;
+        Texture texture{"", "Pie"};
+        texture.Bind();
+        shader.SetUniform1i("u_Texture", 0);
 
         va.Unbind();
-        // vb.Unbind();
-        // ib.Unbind();
+        vb.Unbind();
+        ib.Unbind();
         shader.Unbind();
+
+        Renderer renderer;
 
         float r = 0.0f;
         float increment = 0.05f;
@@ -99,7 +108,7 @@ int main()
             /* Render here */
             renderer.Clear();
 
-            shader.SetUniform4f("u_Color", r, 0.0f, 1.0f, 1.0f);
+            shader.SetUniform4f("u_Color", r, 1.0f, 1.0f, 1.0f);
 
             renderer.Draw(va, shader);
 
