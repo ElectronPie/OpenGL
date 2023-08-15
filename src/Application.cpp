@@ -7,6 +7,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "Renderer.h"
 
 #include "VertexBuffer.h"
@@ -85,8 +88,11 @@ int main()
         IndexBuffer ib{indices, (sizeof(indices)/sizeof(indices[0]))};
         va.AddIndexBuffer(ib);
 
+        glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
         Shader shader{"", "Basic"};
         shader.SetUniform4f("u_Color", 0.0f, 0.0f, 1.0f, 1.0f);
+        shader.SetUniformMat4f("u_MVP", proj);
 
         Texture texture{"", "Pie"};
         texture.Bind();

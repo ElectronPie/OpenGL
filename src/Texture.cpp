@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 
-#include <stb_image.h>
+#include <stb_image/stb_image.h>
 
 static std::string GetFileContents(const std::string& filepath)
 {
