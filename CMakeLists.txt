@@ -23,6 +23,9 @@ add_executable(${PROJECT_NAME}
 
     src/Texture.h
     src/Texture.cpp
+
+    src/vendor/stb_image/stb_image.h
+    src/vendor/stb_image/stb_image.cpp
 )
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
@@ -40,9 +43,9 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/glfw)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/debugbreak)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb_image)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/vendor/stb_image)
 
-target_link_libraries(${PROJECT_NAME} glad glfw debugbreak stb_image)
+target_link_libraries(${PROJECT_NAME} glad glfw debugbreak)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
