@@ -43,7 +43,10 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/glfw)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/debugbreak)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/vendor)
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/vendor
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm
+)
 
 target_link_libraries(${PROJECT_NAME} glad glfw debugbreak)
 
