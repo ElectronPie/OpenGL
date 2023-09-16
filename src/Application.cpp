@@ -94,13 +94,8 @@ int main()
 
         glm::mat4 proj  = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
         glm::mat4 view  = glm::translate(glm::mat4(1.0f), glm::vec3(-100.0f, 0.0f, 0.0f));
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 200.0f, 0.0f));
-
-        glm::mat4 mvp = proj * view * model;
 
         Shader shader{"", "Basic"};
-        shader.SetUniform4f("u_Color", 0.0f, 0.0f, 1.0f, 1.0f);
-        shader.SetUniformMat4f("u_MVP", mvp);
 
         Texture texture{"", "Pie"};
         texture.Bind();
@@ -120,6 +115,7 @@ int main()
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
         // Setup Platform/Renderer backends
         ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
@@ -127,8 +123,9 @@ int main()
 
         ImGui::StyleColorsDark();
 
-        float r = 0.0f;
-        float increment = 0.05f;
+        glm::vec3 translation(200.0f, 200.0f, 0.0f);
+        glm::vec4 clear_color(0.0f, 1.0f, 1.0f, 1.0f);
+        shader.SetUniform4f("u_Color", clear_color.r, clear_color.g, clear_color.b, clear_color.a);
 
         /* Loop until the user closes the window */
         while(!glfwWindowShouldClose(window))
@@ -140,20 +137,36 @@ int main()
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
+
             ImGui::ShowDemoWindow(); // Show demo window! :)
 
-            shader.SetUniform4f("u_Color", r, 1.0f, 1.0f, 1.0f);
+            ImGui::Begin("Hello, viewport!");
+
+            ImGui::ColorEdit4("Clear color", (float*)&clear_color);
+            shader.SetUniform4f("u_Color", clear_color.r, clear_color.g, clear_color.b, clear_color.a);
+
+            ImGui::SliderFloat2("Model position (x; y)", (float*)&translation.x, 0.0f, 600.0f);
+            glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+            glm::mat4 mvp = proj * view * model;
+            shader.SetUniformMat4f("u_MVP", mvp);
+
+            ImGui::End();
 
             renderer.Draw(va, shader);
 
-            if(r >= 1.0f)
-                increment = -0.05f;
-            else if(r <= 0.0f)
-                increment = +0.05f;
-            r += increment;
-
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+            // Update and Render additional Platform Windows
+            // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+            //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+            if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+            {
+                GLFWwindow* backup_current_context = glfwGetCurrentContext();
+                ImGui::UpdatePlatformWindows();
+                ImGui::RenderPlatformWindowsDefault();
+                glfwMakeContextCurrent(backup_current_context);
+            }
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
