@@ -26,6 +26,10 @@ add_executable(${PROJECT_NAME}
 
     src/vendor/stb_image/stb_image.h
     src/vendor/stb_image/stb_image.cpp
+
+    src/tests/Test.h
+    src/tests/TestClearColor.h
+    src/tests/TestClearColor.cpp
 )
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
@@ -58,6 +62,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/vendor
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui
