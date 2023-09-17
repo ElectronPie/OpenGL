@@ -4,7 +4,8 @@
 
 #include "VertexBufferLayout.h"
 
-VertexArray::VertexArray()
+VertexArray::VertexArray():
+    m_IndicesCount{0}
 {
     GLCall(glGenVertexArrays(1, &m_RendererID));
 }
@@ -24,7 +25,7 @@ void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
     {
         const auto& element = elements[i];
         GLCall(glEnableVertexAttribArray(i));
-        GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.GetStride(), (const void*)offset));
+        GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.GetStride(), (const void*)(std::uintptr_t)offset));
         offset += element.count * VertexBufferElement::GetTypeSize(element.type);
     }
 }
@@ -33,6 +34,8 @@ void VertexArray::AddIndexBuffer(const IndexBuffer& ib)
 {
     Bind();
     ib.Bind();
+
+    m_IndicesCount = ib.GetCount();
 }
 
 void VertexArray::Bind() const

@@ -28,7 +28,7 @@ void Renderer::Draw(const VertexArray& va, const Shader& shader)
 
     shader.Bind();
 
-    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL));
+    GLCall(glDrawElements(GL_TRIANGLES, va.GetIndicesCount(), GL_UNSIGNED_INT, NULL));
 }
 
 void Renderer::Clear()
