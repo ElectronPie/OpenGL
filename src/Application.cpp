@@ -67,10 +67,10 @@ int main()
 
     {
         float positions[] = {
-            100.0f, 100.0f, 0.0f, 0.0f, // 0
-            200.0f, 100.0f, 1.0f, 0.0f, // 1
-            200.0f, 200.0f, 1.0f, 1.0f, // 2
-            100.0f, 200.0f, 0.0f, 1.0f  // 3
+            -50.0f, -50.0f, 0.0f, 0.0f, // 0
+            +50.0f, -50.0f, 1.0f, 0.0f, // 1
+            +50.0f, +50.0f, 1.0f, 1.0f, // 2
+            -50.0f, +50.0f, 0.0f, 1.0f  // 3
         };
 
         unsigned int indices[] = {
@@ -92,8 +92,8 @@ int main()
         IndexBuffer ib{indices, (sizeof(indices)/sizeof(indices[0]))};
         va.AddIndexBuffer(ib);
 
-        glm::mat4 proj  = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
-        glm::mat4 view  = glm::translate(glm::mat4(1.0f), glm::vec3(-100.0f, 0.0f, 0.0f));
+        glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
         Shader shader{"", "Basic"};
 
@@ -123,7 +123,9 @@ int main()
 
         ImGui::StyleColorsDark();
 
-        glm::vec3 translation(200.0f, 200.0f, 0.0f);
+        glm::vec3 translationA(200.0f, 200.0f, 0.0f);
+        glm::vec3 translationB(400.0f, 400.0f, 0.0f);
+
         glm::vec4 clear_color(0.0f, 1.0f, 1.0f, 1.0f);
         shader.SetUniform4f("u_Color", clear_color.r, clear_color.g, clear_color.b, clear_color.a);
 
@@ -145,14 +147,27 @@ int main()
             ImGui::ColorEdit4("Clear color", (float*)&clear_color);
             shader.SetUniform4f("u_Color", clear_color.r, clear_color.g, clear_color.b, clear_color.a);
 
-            ImGui::SliderFloat2("Model position (x; y)", (float*)&translation.x, 0.0f, 600.0f);
-            glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-            glm::mat4 mvp = proj * view * model;
-            shader.SetUniformMat4f("u_MVP", mvp);
+            ImGui::SliderFloat2("Model position A", (float*)&translationA.x, 0.0f, 600.0f);
+            ImGui::SliderFloat2("Model position B", (float*)&translationB.x, 0.0f, 600.0f);
 
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
             ImGui::End();
 
-            renderer.Draw(va, shader);
+            shader.Bind();
+
+            {
+                glm::mat4 model = glm::translate(glm::mat4(1.0f), translationA);
+                glm::mat4 mvp = proj * view * model;
+                shader.SetUniformMat4f("u_MVP", mvp);
+                renderer.Draw(va, shader);
+            }
+
+            {
+                glm::mat4 model = glm::translate(glm::mat4(1.0f), translationB);
+                glm::mat4 mvp = proj * view * model;
+                shader.SetUniformMat4f("u_MVP", mvp);
+                renderer.Draw(va, shader);
+            }
 
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
