@@ -23,6 +23,7 @@
 
 #include "tests/Test.h"
 #include "tests/TestClearColor.h"
+#include "tests/TestBlending.h"
 
 int main()
 {
@@ -93,6 +94,7 @@ int main()
         currentTest = testMenu;
 
         testMenu->RegisterTest<test::TestClearColor>("Clear color");
+        testMenu->RegisterTest<test::TestBlending>("Blending");
 
         /* Loop until the user closes the window */
         while(!glfwWindowShouldClose(window))
