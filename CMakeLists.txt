@@ -28,6 +28,7 @@ add_executable(${PROJECT_NAME}
     src/vendor/stb_image/stb_image.cpp
 
     src/tests/Test.h
+    src/Tests/Test.cpp
     src/tests/TestClearColor.h
     src/tests/TestClearColor.cpp
 )
@@ -57,8 +58,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/backends/imgui_impl_glfw.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/backends/imgui_impl_opengl3.h
     ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/backends/imgui_impl_opengl3.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/misc/cpp/imgui_stdlib.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/misc/cpp/imgui_stdlib.cpp
+    # ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/misc/cpp/imgui_stdlib.h
+    # ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/misc/cpp/imgui_stdlib.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE

@@ -1,8 +1,6 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <fstream>
-#include <sstream>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -23,6 +21,7 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include "tests/Test.h"
 #include "tests/TestClearColor.h"
 
 int main()
@@ -72,6 +71,7 @@ int main()
         GLCall(glEnable(GL_BLEND));
 
         Renderer renderer;
+        Shader* shader;
 
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
@@ -88,23 +88,39 @@ int main()
 
         ImGui::StyleColorsDark();
 
-        test::TestClearColor test;
+        test::Test* currentTest = nullptr;
+        test::TestMenu* testMenu = new test::TestMenu{currentTest};
+        currentTest = testMenu;
+
+        testMenu->RegisterTest<test::TestClearColor>("Clear color");
 
         /* Loop until the user closes the window */
         while(!glfwWindowShouldClose(window))
         {
             /* Render here */
+            renderer.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             renderer.Clear();
-
-            test.OnUpdate(0.0f);
-            test.OnRender();
 
             // Start the Dear ImGui frame
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
 
-            test.OnImGuiRender();
+            if(currentTest)
+            {
+                currentTest->OnUpdate(0.0f);
+                currentTest->OnRender();
+                ImGui::Begin("Test");
+                if(currentTest != testMenu && ImGui::Button("<-"))
+                {
+                    delete currentTest;
+                    currentTest = testMenu;
+                }
+                currentTest->OnImGuiRender();
+                ImGui::End();
+            }
+
+            ImGui::ShowDemoWindow();
 
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -114,6 +130,12 @@ int main()
 
             /* Poll for and process events */
             glfwPollEvents();
+        }
+
+        delete currentTest;
+        if(currentTest != testMenu)
+        {
+            delete testMenu;
         }
     }
 

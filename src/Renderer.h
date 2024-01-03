@@ -31,4 +31,5 @@ class Renderer
 public:
     void Draw(const VertexArray& va, const Shader& shader);
     void Clear();
+    void ClearColor(float r, float g, float b, float a);
 };
