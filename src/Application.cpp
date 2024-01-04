@@ -25,7 +25,21 @@
 #include "tests/TestClearColor.h"
 #include "tests/TestBlending.h"
 
-int main()
+static std::string GetTestNameFromArgs(int argc, char** argv)
+{
+    for(int i = 1; i < argc - 1; ++i)
+    {
+        if(std::string t{argv[i]};
+           t == "-t" ||
+           t == "--test")
+        {
+            return argv[i + 1];
+        }
+    }
+    return std::string{};
+}
+
+int main(int argc, char** argv)
 {
     GLFWwindow* window;
 
@@ -95,6 +109,8 @@ int main()
 
         testMenu->RegisterTest<test::TestClearColor>("Clear color");
         testMenu->RegisterTest<test::TestBlending>("Blending");
+
+        testMenu->UseTest(GetTestNameFromArgs(argc, argv));
 
         /* Loop until the user closes the window */
         while(!glfwWindowShouldClose(window))

@@ -19,4 +19,22 @@ namespace test
             }
         }
     }
+
+    void TestMenu::UseTest(const std::string& name)
+    {
+        if(name == "")
+        {
+            return;
+        }
+        for(auto& test : m_Tests)
+        {
+            if(name == test.first)
+            {
+                std::cout << "Using test " << std::quoted(name) << std::endl;
+                m_CurrentTest = test.second();
+                return;
+            }
+        }
+        std::cout << "Test " << std::quoted(name) << " was not found!" << std::endl;
+    }
 }

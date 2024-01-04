@@ -4,6 +4,7 @@
 #include <string>
 #include <functional>
 #include <iostream>
+#include <iomanip>
 
 namespace test
 {
@@ -28,9 +29,11 @@ namespace test
         template<typename T>
         void RegisterTest(const std::string& name)
         {
-            std::cout << "Registering test " << name << std::endl;
+            std::cout << "Registering test " << std::quoted(name) << std::endl;
             m_Tests.emplace_back(name, []() { return new T{}; });
         }
+
+        void UseTest(const std::string& name);
 
     private:
         Test*& m_CurrentTest;
