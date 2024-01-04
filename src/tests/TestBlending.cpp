@@ -14,7 +14,7 @@ namespace test
         m_LastState{m_CurrentState},
         m_CurrentSRCFactorIdx{6},       // GL_SRC_ALPHA
         m_CurrentDSTFactorIdx{7},       // GL_ONE_MINUS_SRC_ALPHA
-        m_CurrentBlendFuncFuncIdx{0}    // GL_FUNC_ADD
+        m_CurrentBlendFuncIdx{0}        // GL_FUNC_ADD
     {
         Update();
     }
@@ -45,11 +45,11 @@ namespace test
             }, nullptr, m_NumFactors);
         m_CurrentState.dfactor = m_FactorValues[m_CurrentDSTFactorIdx].first;
 
-        ImGui::Combo("Blending function", &m_CurrentBlendFuncFuncIdx,
+        ImGui::Combo("Blending function", &m_CurrentBlendFuncIdx,
             [](void* user_data, int idx) {
                 return TestBlending::m_FuncValues[idx].second;
             }, nullptr, m_NumFuncs);
-        m_CurrentState.blendFunc = m_FuncValues[m_CurrentBlendFuncFuncIdx].first;
+        m_CurrentState.blendFunc = m_FuncValues[m_CurrentBlendFuncIdx].first;
 
         ImGui::Checkbox("Enable blending", &m_CurrentState.enabled);
     }

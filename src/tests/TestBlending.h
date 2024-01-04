@@ -63,7 +63,7 @@ namespace test
 
         int m_CurrentSRCFactorIdx;
         int m_CurrentDSTFactorIdx;
-        int m_CurrentBlendFuncFuncIdx;
+        int m_CurrentBlendFuncIdx;
 
         void Update();
     };
