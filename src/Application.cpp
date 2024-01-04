@@ -24,6 +24,7 @@
 #include "tests/Test.h"
 #include "tests/TestClearColor.h"
 #include "tests/TestBlending.h"
+#include "tests/TestTexture2D.h"
 
 static std::string GetTestNameFromArgs(int argc, char** argv)
 {
@@ -109,6 +110,7 @@ int main(int argc, char** argv)
 
         testMenu->RegisterTest<test::TestClearColor>("Clear color");
         testMenu->RegisterTest<test::TestBlending>("Blending");
+        testMenu->RegisterTest<test::TestTexture2D>("Texture2D");
 
         testMenu->UseTest(GetTestNameFromArgs(argc, argv));
 

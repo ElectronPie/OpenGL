@@ -33,6 +33,8 @@ add_executable(${PROJECT_NAME}
     src/tests/TestClearColor.cpp
     src/tests/TestBlending.h
     src/tests/TestBlending.cpp
+    src/tests/TestTexture2D.h
+    src/tests/TestTexture2D.cpp
 )
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
