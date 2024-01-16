@@ -28,7 +28,7 @@ add_executable(${PROJECT_NAME}
     src/vendor/stb_image/stb_image.cpp
 
     src/tests/Test.h
-    src/Tests/Test.cpp
+    src/tests/Test.cpp
     src/tests/TestClearColor.h
     src/tests/TestClearColor.cpp
     src/tests/TestBlending.h
