@@ -41,18 +41,19 @@ namespace test
         glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
         m_Shader = std::make_unique<Shader>("", "Basic");
+        m_Shader->Bind();
 
         m_Texture = std::make_unique<Texture>("", "Pie");
         m_Texture->Bind();
         m_Shader->SetUniform1i("u_Texture", 0);
 
+        glm::vec4 clear_color(0.0f, 1.0f, 1.0f, 1.0f);
+        m_Shader->SetUniform4f("u_Color", clear_color.r, clear_color.g, clear_color.b, clear_color.a);
+
         m_VAO->Unbind();
         vb.Unbind();
         ib.Unbind();
         m_Shader->Unbind();
-
-        glm::vec4 clear_color(0.0f, 1.0f, 1.0f, 1.0f);
-        m_Shader->SetUniform4f("u_Color", clear_color.r, clear_color.g, clear_color.b, clear_color.a);
 
         m_TestBlending = std::make_unique<TestBlending>();
     }

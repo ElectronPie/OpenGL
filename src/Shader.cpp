@@ -124,29 +124,50 @@ void Shader::Unbind() const
     GLCall(glUseProgram(0));
 }
 
-void Shader::SetUniform1i(const std::string& name, int value)
-{
-    Bind();
-    GLCall(glUniform1i(GetUniformLocation(name), value));
+#define UNIFORM_VECTOR_1(PREFIX, TYPE) \
+void Shader::SetUniform1 ## PREFIX (const std::string& name, TYPE value) \
+{ \
+    GLCall(glUniform1 ## PREFIX (GetUniformLocation(name), value)); \
 }
 
-void Shader::SetUniform1f(const std::string& name, float value)
-{
-    Bind();
-    GLCall(glUniform1f(GetUniformLocation(name), value));
+#define UNIFORM_VECTOR_2(PREFIX, TYPE) \
+void Shader::SetUniform2 ## PREFIX (const std::string& name, TYPE v0, TYPE v1) \
+{ \
+    GLCall(glUniform2 ## PREFIX (GetUniformLocation(name), v0, v1)); \
 }
 
-void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
-{
-    Bind();
-    GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
+#define UNIFORM_VECTOR_3(PREFIX, TYPE) \
+void Shader::SetUniform3 ## PREFIX (const std::string& name, TYPE v0, TYPE v1, TYPE v2) \
+{ \
+    GLCall(glUniform3 ## PREFIX (GetUniformLocation(name), v0, v1, v2)); \
 }
 
-void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
-{
-    Bind();
-    GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]));
+#define UNIFORM_VECTOR_4(PREFIX, TYPE) \
+void Shader::SetUniform4 ## PREFIX (const std::string& name, TYPE v0, TYPE v1, TYPE v2, TYPE v3) \
+{ \
+    GLCall(glUniform4 ## PREFIX (GetUniformLocation(name), v0, v1, v2, v3)); \
 }
+
+#define UNIFORM_MATRIX_M_X_M(M) \
+void Shader::SetUniformMat ## M ## f(const std::string& name, const glm::mat ## M & matrix) \
+{ \
+    GLCall(glUniformMatrix ## M ## fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0])); \
+}
+
+#define UNIFORM_MATRIX_M_X_N(M, N) \
+void Shader::SetUniformMat ## M ## x ## N ## f(const std::string& name, const glm::mat ## M ## x ## N & matrix) \
+{ \
+    GLCall(glUniformMatrix ## M ## x ## N ## fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0])); \
+}
+
+UNIFORMS
+
+#undef UNIFORM_VECTOR_1
+#undef UNIFORM_VECTOR_2
+#undef UNIFORM_VECTOR_3
+#undef UNIFORM_VECTOR_4
+#undef UNIFORM_MATRIX_M_X_M
+#undef UNIFORM_MATRIX_M_X_N
 
 unsigned int Shader::GetUniformLocation(const std::string& name) const
 {
